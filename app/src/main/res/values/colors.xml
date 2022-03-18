@@ -3,6 +3,8 @@
     <color name="blue">#296ACA</color>
     <color name="red">#B32323</color>
     <color name="gray">#423E3E</color>
+    <color name="header_background">#27272b</color>
+    <color name="browse_background">#191a1e</color>
     <color name="light_gray">#656363</color>
     <color name="light_blue">#54B7D8</color>
 </resources>

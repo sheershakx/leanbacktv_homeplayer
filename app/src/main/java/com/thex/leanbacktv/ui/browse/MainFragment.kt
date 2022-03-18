@@ -1,5 +1,6 @@
 package com.thex.leanbacktv.ui.browse
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -23,6 +24,11 @@ class MainFragment : BrowseSupportFragment() {
         private val TAG = MainFragment::class.java.name
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+//        requireContext().setTheme(R.style.CustomBrowseStyle)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         headerList.add(HeaderTitleModel(0, "Image"))
         headerList.add(HeaderTitleModel(1, "Audio"))
@@ -42,20 +48,15 @@ class MainFragment : BrowseSupportFragment() {
     private fun loadData() {
         val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
         adapter = rowsAdapter
+
+        //adding section row for headers
+        rowsAdapter.add(SectionRow(HeaderItem("Home Player")))
         for (i in 0 until headerList.size) {
+
             val header = HeaderItem(headerList[i].headerID.toLong(), headerList[i].headerName)
             val pageRow = PageRow(header)
             rowsAdapter.add(pageRow)
         }
-//        val headerImage = HeaderItem(IMAGE_HEADER, "Image")
-//        val pageRowImage = PageRow(headerImage)
-//        rowsAdapter.add(pageRowImage)
-//        val headerAudio = HeaderItem(AUDIO_HEADER, "Audio")
-//        val pageRowAudio = PageRow(headerAudio)
-//        rowsAdapter.add(pageRowAudio)
-//        val headerVideo = HeaderItem(VIDEO_HEADER, "Video")
-//        val pageRowVideo = PageRow(headerVideo)
-//        rowsAdapter.add(pageRowVideo)
 
     }
 
@@ -81,7 +82,8 @@ class MainFragment : BrowseSupportFragment() {
 
         headersState = HEADERS_ENABLED
         isHeadersTransitionOnBackEnabled = true
-        brandColor = ContextCompat.getColor(requireContext(), R.color.gray)
+
+        brandColor = ContextCompat.getColor(requireContext(), R.color.header_background)
 
     }
 

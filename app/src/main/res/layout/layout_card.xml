@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.leanback.widget.BaseCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_card"
-    android:layout_width="200dp"
-    android:layout_height="150dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
 
     <ImageView
         android:id="@+id/img_cardimage"
-        android:layout_width="200dp"
-        android:layout_height="110dp"
+        android:layout_width="@dimen/_90sdp"
+        android:layout_height="@dimen/_45sdp"
         android:scaleType="fitXY"
-        android:src="@drawable/img_directory" />
+        android:src="@drawable/img_directory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-
         android:id="@+id/tv_cardtitle"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:padding="3dp"
-        android:text="asdfasdf"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Media Title"
+        android:padding="@dimen/_3sdp"
+        android:textAlignment="center"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_cardimage" />
 
-        android:textSize="18sp" />
-
-</androidx.leanback.widget.BaseCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

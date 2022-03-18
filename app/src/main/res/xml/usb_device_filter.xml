@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <usb-device class="00"></usb-device>
+    <usb-device class="01"></usb-device>
+    <usb-device class="02"></usb-device>
+    <usb-device class="05"></usb-device>
+    <usb-device class="06"></usb-device>
+    <usb-device class="08"></usb-device>
+    <!--        product-id="25479"-->
+    <!--        vendor-id="1423" />-->
+</resources>
+

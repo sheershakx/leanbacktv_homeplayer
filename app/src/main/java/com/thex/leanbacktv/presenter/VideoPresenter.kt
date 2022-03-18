@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.leanback.widget.BaseCardView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
@@ -27,7 +28,7 @@ class VideoPresenter(val context: Activity) : Presenter() {
     class MYViewHolder(ItemView: View) : Presenter.ViewHolder(ItemView) {
         var cardImage: ImageView = ItemView.findViewById(R.id.img_cardimage)
         var cardTitle: TextView = ItemView.findViewById(R.id.tv_cardtitle)
-        var cardLayout: BaseCardView = ItemView.findViewById(R.id.layout_card)
+        var cardLayout: ConstraintLayout = ItemView.findViewById(R.id.layout_card)
 
     }
 

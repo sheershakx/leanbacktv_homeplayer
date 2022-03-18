@@ -1,4 +1,40 @@
 <resources>
 
-    <style name="Theme.LeanbackTv" parent="@style/Theme.AppCompat" />
+    <style name="LeanBackTheme" parent="@style/Theme.Leanback" />
+
+    <style name="CustomHeaderSectionStyle" parent="Widget.Leanback.Header">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingStart">@dimen/_16sdp</item>
+    </style>
+
+    <style name="CustomHeaderStyle" parent="Widget.Leanback.Header">
+        <item name="android:background">@drawable/header_item_selector</item>
+        <item name="android:width">@dimen/_200sdp</item>
+        <item name="android:paddingLeft">@dimen/_30sdp</item>
+        <item name="android:textSize">@dimen/_8ssp</item>
+
+    </style>
+
+    <style name="CustomHeaderGridStyle" parent="Widget.Leanback.Headers.VerticalGridView">
+        <item name="android:paddingStart">0dp</item>
+
+    </style>
+
+    <style name="CustomBrowseTitleStyle" parent="Theme.Leanback.Browse">
+        <item name="android:textSize">@dimen/_18ssp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="CustomBrowseStyle" parent="Theme.Leanback.Browse">
+
+        <item name="browseTitleTextStyle">@style/CustomBrowseTitleStyle</item>
+        <item name="headerStyle">@style/CustomHeaderStyle</item>
+        <item name="headersVerticalGridStyle">@style/CustomHeaderGridStyle</item>
+        <item name="sectionHeaderStyle">@style/CustomHeaderSectionStyle</item>
+        <item name="android:windowBackground">@color/browse_background</item>
+
+    </style>
+
 </resources>

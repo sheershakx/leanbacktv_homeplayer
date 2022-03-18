@@ -21,12 +21,14 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.thex.leanbacktv.MainApplication
 import com.thex.leanbacktv.databinding.ActivityMainBinding
+import com.thex.leanbacktv.utils.PermissionUtils
+import com.thex.leanbacktv.utils.UsbBroadcastReceiverClass
+import com.thex.leanbacktv.utils.toast
 import com.thex.leanbacktv.viewmodel.UsbActionListener
 import me.jahnen.libaums.core.UsbMassStorageDevice
 import me.jahnen.libaums.core.fs.FileSystem
 import java.io.IOException
 import java.util.*
-import java.util.jar.Manifest
 
 class MainActivity : FragmentActivity() {
     lateinit var binding: ActivityMainBinding
@@ -43,7 +45,7 @@ class MainActivity : FragmentActivity() {
         var usbPath: String = ""
         private val TAG = MainActivity::class.java.name
         private const val STORAGE_REQUEST_CODE = 1001
-        private const val ACTION_USB_PERMISSION = "com.thex.leanbacktv.USB_PERMISSION"
+        private const val ACTION_USB_PERMISSION = "com.thex.leanbacktv" + ".USB_PERMISSION"
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -55,10 +57,12 @@ class MainActivity : FragmentActivity() {
         isUsbAction = false
         viewModelListener = ViewModelProvider(this).get(UsbActionListener::class.java)
         usbManager = applicationContext.getSystemService(USB_SERVICE) as UsbManager
-        if (storagePermission()) {
-            registerBroadCast()
-            discoverDevice()
-        }
+
+        //start usb broadcast and discover process
+
+        registerBroadCast()
+        discoverDevice()
+
 
     }
 
@@ -121,8 +125,8 @@ class MainActivity : FragmentActivity() {
     }
 
 
-    private fun discoverDevice() {
-        val usbManager = applicationContext.getSystemService(USB_SERVICE) as UsbManager?
+    public fun discoverDevice() {
+
 
         val devices = UsbMassStorageDevice.getMassStorageDevices(applicationContext)
 
@@ -130,8 +134,6 @@ class MainActivity : FragmentActivity() {
             Log.d(TAG, "USB device not found::: ${devices.size}")
             Toast.makeText(applicationContext, "device not found", Toast.LENGTH_SHORT).show()
             attachFragmentToFrame()
-
-
         }
 
         // we only use the first device
@@ -143,19 +145,33 @@ class MainActivity : FragmentActivity() {
 
             val usbDevice = this.intent?.getParcelableExtra<UsbDevice>(UsbManager.EXTRA_DEVICE)
 
-            if (usbDevice != null && usbManager!!.hasPermission(usbDevice)) {
+            if (usbDevice != null && usbManager!!.hasPermission(usbDevice)
+            ) {
                 Toast.makeText(applicationContext, "received device via intent", Toast.LENGTH_SHORT)
                     .show()
                 MainApplication.hasRecognizedDevice = true
 
                 setupDevice()
             } else {
+                // setupDevice()
                 val permissionIntent = PendingIntent.getBroadcast(
                     applicationContext, 0, Intent(
                         ACTION_USB_PERMISSION
                     ), 0
+
                 )
+
+
                 usbManager!!.requestPermission(device.usbDevice, permissionIntent)
+
+
+//                if (usbManager?.hasPermission(device.usbDevice) == false) {
+//                    usbManager!!.requestPermission(device.usbDevice, permissionIntent)
+//                } else {
+//                    setupDevice()
+//                }
+
+
             }
         }
     }
@@ -174,10 +190,7 @@ class MainActivity : FragmentActivity() {
             applicationContext.unregisterReceiver(usbReceiver)
 
         } catch (e: Exception) {
-
         }
-
-
     }
 
     override fun onDestroy() {
@@ -186,9 +199,11 @@ class MainActivity : FragmentActivity() {
     }
 
     private val usbReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.M)
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent != null) {
+            if (intent != null && storagePermission()) {
                 if (ACTION_USB_PERMISSION == intent.action) {
+                    Log.d(TAG, "onReceive: action_usb_permission")
                     synchronized(this) {
                         val device: UsbDevice? =
                             intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
@@ -206,9 +221,8 @@ class MainActivity : FragmentActivity() {
                     }
                 } else if (UsbManager.ACTION_USB_ACCESSORY_ATTACHED == intent.action) {
                     device?.apply {
+                        Log.d(TAG, "onReceive: action_accessory_attached")
                         MainApplication.hasRecognizedDevice = true
-
-
 
                         discoverDevice()
 
@@ -218,6 +232,7 @@ class MainActivity : FragmentActivity() {
                 if (intent.action.equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
                     // on usb re attached
                     isUsbAction = true
+                    finish()
                     discoverDevice()
 
                 }
@@ -229,38 +244,45 @@ class MainActivity : FragmentActivity() {
 
                 }
             }
-            /*   when (intent?.action) {
-                   UsbManager.ACTION_USB_ACCESSORY_ATTACHED -> {
-                       Log.d(TAG, "usb accessory attached: ")
-                   }
-                   UsbManager.ACTION_USB_DEVICE_ATTACHED -> {
-                       //if device attacth
-                       //checkstoragepermission already given
-                       //device setup
-                       //else
-                       //requestpermission and discover and  setup device
-                       //  device.apply {
-                       Log.d(TAG, "device attached")
-                       MainApplication().hasRecognizedDevice = true
-                       discoverDevice()
 
-                       //  }
-                   }
-                   UsbManager.ACTION_USB_DEVICE_DETACHED -> {
-                       //on usb detached
-                       isUsbAction = true
-                       viewModelListener.isUSBAttached(false)
-                   }
-
-               }*/
+            //-----//
+//            when (intent?.action) {
+//                ACTION_USB_PERMISSION -> {
+//                    Log.d(TAG, "onReceive: usb action permission")
+//                }
+//                UsbManager.ACTION_USB_ACCESSORY_ATTACHED -> {
+//                    if (storagePermission()) {
+//                        Log.d(TAG, "usb accessory attached: ")
+//                    }
+//                }
+//                UsbManager.ACTION_USB_DEVICE_ATTACHED -> {
+//                    if (intent.action == ACTION_USB_PERMISSION) {
+//                        MainApplication.hasRecognizedDevice = true
+//                        setupDevice()
+//                    } else {
+//                        discoverDevice()
+//                    }
+//                }
+//                UsbManager.ACTION_USB_DEVICE_DETACHED -> {
+//                    //on usb detached
+//                    isUsbAction = true
+//                    viewModelListener.isUSBAttached(false)
+//                }
+//
+//            }
         }
 
     }
 
     private fun setupDevice() {
+
         try {
             device.init()
             fs = device.partitions[0].fileSystem
+            Log.d(
+                TAG,
+                "device details: product id :${device.usbDevice.productId}, vendorid: ${device.usbDevice.vendorId} class:${device.usbDevice.deviceClass}  "
+            )
             if (!isUsbAction) {
                 attachFragmentToFrame()
             } else {

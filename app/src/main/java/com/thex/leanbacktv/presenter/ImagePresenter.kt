@@ -27,6 +27,7 @@ import java.io.File
 import java.lang.Exception
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.leanback.widget.BaseCardView
 import androidx.leanback.widget.ImageCardView
@@ -37,7 +38,7 @@ class ImagePresenter(val context: Activity) : Presenter() {
     class MYViewHolder(ItemView: View) : Presenter.ViewHolder(ItemView) {
         var cardImage: ImageView = ItemView.findViewById(R.id.img_cardimage)
         var cardTitle: TextView = ItemView.findViewById(R.id.tv_cardtitle)
-        var cardLayout: BaseCardView = ItemView.findViewById(R.id.layout_card)
+        var cardLayout: ConstraintLayout = ItemView.findViewById(R.id.layout_card)
 
     }
 

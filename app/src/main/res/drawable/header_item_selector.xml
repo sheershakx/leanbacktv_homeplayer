@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_focused="true">
+        <layer-list>
+            <item android:drawable="@drawable/header_shape_back">
+
+
+            </item>
+            <item android:drawable="@drawable/header_shape_fore">
+
+            </item>
+        </layer-list>
+    </item>
+</selector>
