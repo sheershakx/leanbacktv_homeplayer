@@ -19,9 +19,9 @@ class DetailActivity : FragmentActivity() {
     }
 
     private fun receiveIntentData() {
-        val fileName: String = intent.getStringExtra("fileName")
-        val filePath: String = intent.getStringExtra("filePath")
-        val fileType: String = intent.getStringExtra("fileType")
+        val fileName: String = intent.getStringExtra("fileName").toString()
+        val filePath: String = intent.getStringExtra("filePath").toString()
+        val fileType: String = intent.getStringExtra("fileType").toString()
 
         when (fileType) {
             "Image" -> {

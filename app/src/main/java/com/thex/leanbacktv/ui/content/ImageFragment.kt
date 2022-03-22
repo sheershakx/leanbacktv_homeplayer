@@ -48,9 +48,8 @@ class ImageFragment : VerticalGridSupportFragment(),
         super.onCreate(savedInstanceState)
 
         if (arguments != null) {
-
-            fileName = requireArguments().getString("fileName")
-            filePath = requireArguments().getString("filePath")
+            fileName = requireArguments().getString("fileName").toString()
+            filePath = requireArguments().getString("filePath").toString()
             title = fileName
         }
 
@@ -92,11 +91,14 @@ class ImageFragment : VerticalGridSupportFragment(),
     }
 
     private fun populateData() {
+
+
         if (MainApplication.hasRecognizedDevice) {
             var root: UsbFile = MainActivity.fs.rootDirectory
             if (arguments != null) {
                 val file: UsbFile? = root.search(filePath)
                 if (file != null) {
+
                     viewModel.readAllImages(file)
                 }
             } else {
@@ -142,6 +144,8 @@ class ImageFragment : VerticalGridSupportFragment(),
 
         return BrowseSupportFragment.MainFragmentAdapter(this)
     }
+
+
 
 
 }

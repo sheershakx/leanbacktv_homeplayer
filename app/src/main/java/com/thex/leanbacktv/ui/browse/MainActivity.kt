@@ -10,9 +10,7 @@ import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.os.Build
 import android.os.Bundle
-import android.os.storage.DiskInfo
 import android.os.storage.StorageManager
-import android.os.storage.VolumeInfo
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -21,14 +19,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import com.thex.leanbacktv.MainApplication
 import com.thex.leanbacktv.databinding.ActivityMainBinding
-import com.thex.leanbacktv.utils.PermissionUtils
-import com.thex.leanbacktv.utils.UsbBroadcastReceiverClass
-import com.thex.leanbacktv.utils.toast
 import com.thex.leanbacktv.viewmodel.UsbActionListener
 import me.jahnen.libaums.core.UsbMassStorageDevice
 import me.jahnen.libaums.core.fs.FileSystem
 import java.io.IOException
-import java.util.*
 
 class MainActivity : FragmentActivity() {
     lateinit var binding: ActivityMainBinding
@@ -36,6 +30,7 @@ class MainActivity : FragmentActivity() {
     lateinit var viewModelListener: UsbActionListener
     var isUsbAction: Boolean = false
     lateinit var device: UsbMassStorageDevice
+
 //    lateinit var fs: FileSystem
 //    var usbPath: String = ""
 
@@ -43,9 +38,13 @@ class MainActivity : FragmentActivity() {
     companion object {
         lateinit var fs: FileSystem
         var usbPath: String = ""
+
         private val TAG = MainActivity::class.java.name
         private const val STORAGE_REQUEST_CODE = 1001
         private const val ACTION_USB_PERMISSION = "com.thex.leanbacktv" + ".USB_PERMISSION"
+        private const val ACTION_USB_STATE = "android.hardware.usb.action.USB_STATE"
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -57,11 +56,11 @@ class MainActivity : FragmentActivity() {
         isUsbAction = false
         viewModelListener = ViewModelProvider(this).get(UsbActionListener::class.java)
         usbManager = applicationContext.getSystemService(USB_SERVICE) as UsbManager
-
         //start usb broadcast and discover process
-
-        registerBroadCast()
-        discoverDevice()
+        if (storagePermission()) {
+            registerBroadCast()
+            discoverDevice()
+        }
 
 
     }
@@ -125,7 +124,7 @@ class MainActivity : FragmentActivity() {
     }
 
 
-    public fun discoverDevice() {
+    fun discoverDevice() {
 
 
         val devices = UsbMassStorageDevice.getMassStorageDevices(applicationContext)
@@ -151,6 +150,7 @@ class MainActivity : FragmentActivity() {
                     .show()
                 MainApplication.hasRecognizedDevice = true
 
+
                 setupDevice()
             } else {
                 // setupDevice()
@@ -160,7 +160,6 @@ class MainActivity : FragmentActivity() {
                     ), 0
 
                 )
-
 
                 usbManager!!.requestPermission(device.usbDevice, permissionIntent)
 
@@ -177,12 +176,14 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun registerBroadCast() {
-
         val filter = IntentFilter(ACTION_USB_PERMISSION)
+
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED)
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
+        filter.addAction(ACTION_USB_STATE)
         registerReceiver(usbReceiver, filter)
     }
+
 
     override fun onPause() {
         super.onPause()
@@ -197,6 +198,7 @@ class MainActivity : FragmentActivity() {
         super.onDestroy()
         unregisterReceiver(usbReceiver)
     }
+
 
     private val usbReceiver = object : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.M)
@@ -232,7 +234,6 @@ class MainActivity : FragmentActivity() {
                 if (intent.action.equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
                     // on usb re attached
                     isUsbAction = true
-                    finish()
                     discoverDevice()
 
                 }
@@ -295,14 +296,14 @@ class MainActivity : FragmentActivity() {
                     this,
                     StorageManager::class.java
                 ) as StorageManager
-            val usbPathList = getUsbPaths(storageManager)
-            if (usbPathList?.isNotEmpty() == true) {
-                Log.d(TAG, "setupDevice: usb path not empty")
-                for (path in usbPathList) {
-                    usbPath = path
-                }
-
-            }
+//            val usbPathList = getUsbPaths(storageManager)
+//            if (usbPathList?.isNotEmpty() == true) {
+//                Log.d(TAG, "setupDevice: usb path not empty")
+//                for (path in usbPathList) {
+//                    usbPath = path
+//                }
+//
+//            }
             Log.d(TAG, "usb path is $usbPath ")
 
 
@@ -311,25 +312,25 @@ class MainActivity : FragmentActivity() {
         }
     }
 
-    private fun getUsbPaths(storageManager: StorageManager): List<String>? {
-        val usbPaths: MutableList<String> = ArrayList()
-        val volumes: MutableList<VolumeInfo>? = storageManager.volumes
-        //  Collections.sort(volumes, VolumeInfo.getDescriptionComparator());
-        if (volumes != null) {
-
-            for (vol in volumes) {
-                if (vol.getType() === VolumeInfo.TYPE_PUBLIC) {
-                    val disk: DiskInfo? = vol.getDisk()
-                    if (disk != null) {
-                        if (disk.isUsb) {
-                            usbPaths.add(vol.path)
-                        }
-                    }
-                }
-            }
-        }
-        return usbPaths
-    }
+//    private fun getUsbPaths(storageManager: StorageManager): List<String>? {
+//        val usbPaths: MutableList<String> = ArrayList()
+//        val volumes: MutableList<VolumeInfo>? = storageManager.volumes
+////          Collections.sort(volumes, VolumeInfo.getDescriptionComparator());
+//        if (volumes != null) {
+//
+//            for (vol in volumes) {
+//                if (vol.getType() === VolumeInfo.TYPE_PUBLIC) {
+//                    val disk: DiskInfo? = vol.getDisk()
+//                    if (disk != null) {
+//                        if (disk.isUsb) {
+//                            usbPaths.add(vol.path)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return usbPaths
+//    }
 
 
 }

@@ -16,13 +16,13 @@ object PermissionUtils {
 
     fun hasPermission(activity: Activity, permission: String?): Boolean {
         return if (useRunTimePermissions()) {
-            activity.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+            activity.checkSelfPermission(permission.toString()) == PackageManager.PERMISSION_GRANTED
         } else true
     }
 
     fun requestPermissions(activity: Activity, permission: Array<String?>?, requestCode: Int) {
         if (useRunTimePermissions()) {
-            activity.requestPermissions(permission, requestCode)
+            activity.requestPermissions(permission as Array<out String>, requestCode)
         }
     }
 
@@ -34,7 +34,7 @@ object PermissionUtils {
 
     fun shouldShowRational(activity: Activity, permission: String?): Boolean {
         return if (useRunTimePermissions()) {
-            activity.shouldShowRequestPermissionRationale(permission)
+            activity.shouldShowRequestPermissionRationale(permission.toString())
         } else false
     }
 

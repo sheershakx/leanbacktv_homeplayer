@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdk 29
+    compileSdk 31
     buildFeatures {
         viewBinding = true
     }
     defaultConfig {
         minSdk 19
-        targetSdk 29
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 

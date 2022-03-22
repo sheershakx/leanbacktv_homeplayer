@@ -2,15 +2,24 @@ package com.thex.leanbacktv.ui.content.mediaview
 
 import android.app.Activity
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.os.Environment
 import android.widget.MediaController
-import com.thex.leanbacktv.R
+import com.thex.leanbacktv.MainApplication
 import com.thex.leanbacktv.databinding.ActivityPlayerBinding
+import com.thex.leanbacktv.model.UsbCopyData
+import com.thex.leanbacktv.ui.browse.MainActivity
+import me.jahnen.libaums.core.fs.UsbFile
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.nio.ByteBuffer
+import kotlin.math.min
 
 class PlayerActivity : Activity() {
+    var fileToUse: File? = null
     lateinit var binding: ActivityPlayerBinding
     private lateinit var filepath: String
     private lateinit var filename: String
@@ -30,8 +39,27 @@ class PlayerActivity : Activity() {
             filename = intent.getStringExtra("fileName") as String
             filepath = intent.getStringExtra("filePath") as String
         }
-        Log.d("PlayerActivity", "fetchIntentData: filepath=$filepath ")
-        startPlayer()
+        var root: UsbFile = MainActivity.fs.rootDirectory
+        val file: UsbFile? = root.search(filepath)
+        val param = UsbCopyData()
+        if (file != null) {
+            param.from = file
+            MainApplication.usbCachePath.mkdirs()
+            fileToUse = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+                File(this.getExternalFilesDir(Environment.DIRECTORY_MOVIES)?.absolutePath)
+            } else {
+                MainApplication.usbCachePath
+            }
+            val cacheFile = File(fileToUse, filename)
+            if (cacheFile.exists()) {
+                startPlayer()
+            } else {
+                //  MainApplication.otgViewerCachePath.createNewFile()
+                param.to = cacheFile
+                CopyUsbFile().execute(param)
+            }
+        }
+
     }
 
     private fun startPlayer() {
@@ -42,13 +70,56 @@ class PlayerActivity : Activity() {
 
 
         //setting play content uri to player
-        var uri = Uri.parse(URL)
         // var uri = Uri.parse(URL)
-        //   var uri = Uri.fromFile(File("$filepath"))
+
+        var uri = Uri.fromFile(File("${fileToUse}/$filename"))
+
         binding.videoviewPlayer.setVideoURI(uri)
         binding.videoviewPlayer.requestFocus()
         binding.videoviewPlayer.setZOrderOnTop(true)
         binding.videoviewPlayer.start()
+
+
+    }
+
+    inner class CopyUsbFile : AsyncTask<UsbCopyData?, Int?, Void?>() {
+        private var paramUsb: UsbCopyData? = null
+
+
+        override fun onCancelled(result: Void?) {
+            // Remove uncompleted data file
+            if (paramUsb != null) paramUsb!!.to!!.delete()
+        }
+
+
+        override fun doInBackground(vararg paramUsbs: UsbCopyData?): Void? {
+            val buffer: ByteBuffer = ByteBuffer.allocate(4096)
+            paramUsb = paramUsbs[0]
+            val length = paramUsbs[0]?.from!!.length
+            try {
+                val out = FileOutputStream(paramUsb?.to)
+                var i: Long = 0
+                while (i < length) {
+                    if (!isCancelled) {
+                        buffer.limit(min(buffer.capacity(), (length - i).toInt()))
+                        paramUsbs[0]?.from!!.read(i, buffer)
+                        out.write(buffer.array(), 0, buffer.limit())
+                        publishProgress(i.toInt())
+                        buffer.clear()
+                    }
+                    i += buffer.limit()
+                }
+                out.close()
+            } catch (e: IOException) {
+            }
+            return null
+        }
+
+        override fun onPostExecute(result: Void?) {
+
+            startPlayer()
+            // parent.launchIntent(param!!.to)
+        }
 
 
     }

@@ -48,8 +48,8 @@ class AudioFragment : VerticalGridSupportFragment(),
         super.onCreate(savedInstanceState)
         if (arguments != null) {
 
-            fileName = requireArguments().getString("fileName")
-            filePath = requireArguments().getString("filePath")
+            fileName = requireArguments().getString("fileName", "")
+            filePath = requireArguments().getString("filePath", "")
             title = fileName
         }
         viewModel = ViewModelProvider(requireActivity()).get(AudioViewModel::class.java)

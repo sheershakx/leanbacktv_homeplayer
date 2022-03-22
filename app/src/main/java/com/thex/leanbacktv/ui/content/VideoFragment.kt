@@ -1,7 +1,6 @@
 package com.thex.leanbacktv.ui.content
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.app.VerticalGridSupportFragment
@@ -11,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.thex.leanbacktv.MainApplication
 import com.thex.leanbacktv.model.MediaDataModel
-import com.thex.leanbacktv.presenter.ImagePresenter
 import com.thex.leanbacktv.presenter.VideoPresenter
 import com.thex.leanbacktv.ui.browse.MainActivity
 import com.thex.leanbacktv.utils.toast
@@ -49,8 +47,8 @@ class VideoFragment : VerticalGridSupportFragment(),
         super.onCreate(savedInstanceState)
         if (arguments != null) {
 
-            fileName = requireArguments().getString("fileName")
-            filePath = requireArguments().getString("filePath")
+            fileName = requireArguments().getString("fileName").toString()
+            filePath = requireArguments().getString("filePath").toString()
             title = fileName
         }
 
