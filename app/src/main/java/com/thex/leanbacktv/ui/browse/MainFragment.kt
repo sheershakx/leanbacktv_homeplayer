@@ -24,11 +24,6 @@ class MainFragment : BrowseSupportFragment() {
         private val TAG = MainFragment::class.java.name
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        requireContext().setTheme(R.style.CustomBrowseStyle)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         headerList.add(HeaderTitleModel(0, "Image"))
         headerList.add(HeaderTitleModel(1, "Audio"))

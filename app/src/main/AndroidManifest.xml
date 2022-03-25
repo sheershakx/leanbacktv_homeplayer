@@ -34,7 +34,8 @@
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:theme="@style/LeanBackTheme">
+        android:theme="@style/LeanBackTheme"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.content.DetailActivity"
             android:exported="false" />
@@ -48,13 +49,13 @@
         <activity
             android:name=".ui.browse.MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"
             android:theme="@style/CustomBrowseStyle">
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+                <action android:name="com.thex.leanbacktv.USB_PERMISSION" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />

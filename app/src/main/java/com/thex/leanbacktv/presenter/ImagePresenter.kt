@@ -31,6 +31,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.leanback.widget.BaseCardView
 import androidx.leanback.widget.ImageCardView
+import com.thex.leanbacktv.MainApplication
 import com.thex.leanbacktv.ui.content.DetailActivity
 
 
@@ -55,17 +56,18 @@ class ImagePresenter(val context: Activity) : Presenter() {
         if (item is MediaDataModel) {
 
             holder.cardTitle.text = item.fileName
-            if (item.isDirectory) {
+            if (item.isDirectory == true) {
                 holder.cardImage.setImageResource(R.drawable.img_directory)
             } else {
 
                 Glide.with(context)
-                    .load(Uri.fromFile(File(item.filePath)))
+                    .load(Uri.fromFile(File("${MainApplication.usbCachePath}/${item.fileName}")))
                     .placeholder(R.drawable.placeholder_image)
                     .into(viewHolder.cardImage)
+
             }
             holder.cardLayout.setOnClickListener {
-                if (item.isDirectory) {
+                if (item.isDirectory == true) {
                     val intent = Intent(context, DetailActivity::class.java)
                     intent.putExtra("filePath", item.filePath)
                     intent.putExtra("fileName", item.fileName)

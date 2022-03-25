@@ -2,9 +2,7 @@ package com.thex.leanbacktv.ui.content.mediaview
 
 import android.app.Activity
 import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.thex.leanbacktv.MainApplication
@@ -20,7 +18,6 @@ import java.nio.ByteBuffer
 import kotlin.math.min
 
 class ImageViewActivity : Activity() {
-    var fileToUse: File? = null
     lateinit var binding: ActivityImageViewBinding
     private lateinit var filepath: String
     private lateinit var filename: String
@@ -39,24 +36,19 @@ class ImageViewActivity : Activity() {
         }
         var root: UsbFile = MainActivity.fs.rootDirectory
         val file: UsbFile? = root.search(filepath)
-        val param = UsbCopyData()
+        val usbParameter = UsbCopyData()
         if (file != null) {
-            param.from = file
+            usbParameter.from = file
+
             MainApplication.usbCachePath.mkdirs()
 
-            fileToUse = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
-                File(this.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath)
-            } else {
-                MainApplication.usbCachePath
-            }
 
-
-            val cacheFile = File(fileToUse, filename)
+            val cacheFile = File(MainApplication.usbCachePath, filename)
             if (cacheFile.exists()) {
                 showImage()
             } else {
-                param.to = cacheFile
-                CopyUsbFile().execute(param)
+                usbParameter.to = cacheFile
+                CopyUsbFile().execute(usbParameter)
             }
         }
 
@@ -67,7 +59,7 @@ class ImageViewActivity : Activity() {
         binding.tvImagename.text = filename
         Glide.with(applicationContext)
             .asBitmap()
-            .load("${fileToUse}/$filename")
+            .load("${MainApplication.usbCachePath}/$filename")
             .placeholder(
                 ContextCompat.getDrawable(
                     applicationContext,

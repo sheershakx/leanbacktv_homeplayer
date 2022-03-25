@@ -11,16 +11,17 @@
         android:id="@+id/tv_imagename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-
+        android:layout_marginStart="@dimen/_8sdp"
+        android:padding="@dimen/_5ssp"
+        android:text="sadfasdfas"
         android:textColor="@color/lb_tv_white"
-        android:textSize="24sp" />
+        android:textSize="@dimen/_10ssp" />
 
     <ImageView
         android:id="@+id/iv_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
+        android:layout_marginHorizontal="10dp"
         android:scaleType="fitXY" />
 
 </LinearLayout>

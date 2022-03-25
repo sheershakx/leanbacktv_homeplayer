@@ -41,15 +41,16 @@ class AudioPresenter(val context: Activity) : Presenter() {
         val holder = viewHolder as MYViewHolder
         if (item is MediaDataModel) {
             holder.cardTitle.text = item.fileName
-            if (item.isDirectory) {
+            if (item.isDirectory == true) {
                 holder.cardImage.setImageResource(R.drawable.img_directory)
             } else {
                 Glide.with(context)
                     .load(Uri.fromFile(File(item.filePath)))
+                    .placeholder(R.drawable.placeholder_audio)
                     .into(viewHolder.cardImage)
             }
             holder.cardLayout.setOnClickListener {
-                if (item.isDirectory) {
+                if (item.isDirectory == true) {
                     val intent = Intent(context, DetailActivity::class.java)
                     intent.putExtra("filePath", item.filePath)
                     intent.putExtra("fileName", item.fileName)
@@ -61,6 +62,7 @@ class AudioPresenter(val context: Activity) : Presenter() {
                     val intent = Intent(context, PlayerActivity::class.java)
                     intent.putExtra("filePath", item.filePath)
                     intent.putExtra("fileName", item.fileName)
+                    intent.putExtra("fileType", item.fileType)
                     context.startActivity(intent)
                 }
             }

@@ -4,6 +4,7 @@
     android:id="@+id/layout_card"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@color/browse_background"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
@@ -22,10 +23,11 @@
         android:id="@+id/tv_cardtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Media Title"
         android:padding="@dimen/_3sdp"
+        android:text="Media Title"
         android:textAlignment="center"
-        android:textSize="@dimen/_10ssp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_8ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/img_cardimage" />

@@ -1,0 +1,78 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/error_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:layout_gravity="bottom"
+        android:paddingTop="@dimen/_10sdp">
+
+        <ImageView
+
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:src="@drawable/ic_error" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/error_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-light"
+                android:hint="This is a error title"
+                android:maxLines="2"
+                android:padding="@dimen/_3sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10ssp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/error_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20sdp"
+
+                android:ellipsize="end"
+                android:hint="Error desc"
+                android:maxLines="3"
+
+                android:padding="@dimen/_3sdp"
+                android:textSize="@dimen/_8ssp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_30sdp">
+
+            <Button
+                android:id="@+id/error_btn_ok"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="wrap_content"
+                android:background="@color/red_transparent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="OK"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

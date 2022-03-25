@@ -56,8 +56,6 @@ class ImageViewModel : ViewModel() {
                         mediaList.add(model)
                         break
                     }
-
-
                 }
             }
         }
@@ -66,5 +64,6 @@ class ImageViewModel : ViewModel() {
         mediaLiveData.value = mediaList
 
     }
+
 
 }

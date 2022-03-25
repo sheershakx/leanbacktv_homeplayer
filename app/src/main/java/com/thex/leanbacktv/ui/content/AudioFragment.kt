@@ -9,7 +9,6 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.Snackbar
 import com.thex.leanbacktv.MainApplication
 import com.thex.leanbacktv.model.MediaDataModel
 import com.thex.leanbacktv.presenter.AudioPresenter

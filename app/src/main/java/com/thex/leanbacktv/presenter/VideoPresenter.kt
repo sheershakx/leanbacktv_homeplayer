@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.leanback.widget.BaseCardView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
+import com.thex.leanbacktv.MainApplication
 import com.thex.leanbacktv.R
 import com.thex.leanbacktv.model.MediaDataModel
 import com.thex.leanbacktv.ui.content.DetailActivity
@@ -41,18 +42,19 @@ class VideoPresenter(val context: Activity) : Presenter() {
         val holder = viewHolder as MYViewHolder
 
         if (item is MediaDataModel) {
+            MainApplication.mediaData.add(item)
             holder.cardTitle.text = item.fileName
-            if (item.isDirectory) {
+            if (item.isDirectory == true) {
                 holder.cardImage.setImageResource(R.drawable.img_directory)
             } else {
                 Glide.with(context)
                     .load(Uri.fromFile(File(item.filePath)))
-                    .placeholder(R.drawable.movie_poster)
-
+                    .placeholder(R.drawable.placeholder_video)
                     .into(viewHolder.cardImage)
             }
             holder.cardLayout.setOnClickListener {
-                if (item.isDirectory) {
+                if (item.isDirectory == true) {
+
                     val intent = Intent(context, DetailActivity::class.java)
                     intent.putExtra("filePath", item.filePath)
                     intent.putExtra("fileName", item.fileName)
@@ -64,6 +66,7 @@ class VideoPresenter(val context: Activity) : Presenter() {
                     val intent = Intent(context, PlayerActivity::class.java)
                     intent.putExtra("filePath", item.filePath)
                     intent.putExtra("fileName", item.fileName)
+                    intent.putExtra("fileType", item.fileType)
                     context.startActivity(intent)
                 }
             }

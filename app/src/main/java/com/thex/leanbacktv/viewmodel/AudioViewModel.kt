@@ -3,7 +3,6 @@ package com.thex.leanbacktv.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.thex.leanbacktv.model.MediaDataModel
-import com.thex.leanbacktv.ui.browse.MainActivity
 import me.jahnen.libaums.core.fs.UsbFile
 
 class AudioViewModel : ViewModel() {

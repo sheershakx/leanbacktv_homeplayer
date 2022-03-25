@@ -35,7 +35,6 @@ class VideoFragment : VerticalGridSupportFragment(),
             bundle.putString("fileName", fileName)
             bundle.putString("filePath", filePath)
             fragment.arguments = bundle
-
             return fragment
         }
 
@@ -45,6 +44,7 @@ class VideoFragment : VerticalGridSupportFragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         if (arguments != null) {
 
             fileName = requireArguments().getString("fileName").toString()
@@ -57,7 +57,7 @@ class VideoFragment : VerticalGridSupportFragment(),
         viewModelListener = ViewModelProvider(requireActivity()).get(UsbActionListener::class.java)
 
         val gridPresenter = VerticalGridPresenter()
-        gridPresenter.numberOfColumns = 2
+        gridPresenter.numberOfColumns = 3
         setGridPresenter(gridPresenter)
         val itemPresenter = VideoPresenter(requireActivity())
         gridAdapter = ArrayObjectAdapter(itemPresenter)
@@ -110,8 +110,6 @@ class VideoFragment : VerticalGridSupportFragment(),
     }
 
     private fun loadGrid(videoList: ArrayList<MediaDataModel>) {
-
-
         for (video in videoList) {
             var mediaModel = MediaDataModel(
                 video.id,
