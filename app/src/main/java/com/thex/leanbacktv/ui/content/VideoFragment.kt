@@ -1,6 +1,7 @@
 package com.thex.leanbacktv.ui.content
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.app.VerticalGridSupportFragment
@@ -44,7 +45,7 @@ class VideoFragment : VerticalGridSupportFragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.d(TAG, "onCreate: ")
         if (arguments != null) {
 
             fileName = requireArguments().getString("fileName").toString()
@@ -69,6 +70,7 @@ class VideoFragment : VerticalGridSupportFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel.mediaLiveData.observe(viewLifecycleOwner, Observer {
             loadGrid(it)
         })
@@ -120,6 +122,10 @@ class VideoFragment : VerticalGridSupportFragment(),
                 null
             )
             gridAdapter.add(mediaModel)
+            if (!MainApplication.mediaData.contains(mediaModel)) {
+                MainApplication.mediaData.add(mediaModel)
+
+            }
         }
 
 

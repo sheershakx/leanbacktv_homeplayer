@@ -40,9 +40,9 @@ class VideoPresenter(val context: Activity) : Presenter() {
 
     override fun onBindViewHolder(viewHolder: ViewHolder?, item: Any?) {
         val holder = viewHolder as MYViewHolder
+        holder.cardTitle.isSelected = true
 
         if (item is MediaDataModel) {
-            MainApplication.mediaData.add(item)
             holder.cardTitle.text = item.fileName
             if (item.isDirectory == true) {
                 holder.cardImage.setImageResource(R.drawable.img_directory)

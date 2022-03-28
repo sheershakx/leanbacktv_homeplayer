@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.leanback.widget.BaseCardView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
+import com.thex.leanbacktv.MainApplication
 import com.thex.leanbacktv.R
 import com.thex.leanbacktv.model.MediaDataModel
 import com.thex.leanbacktv.ui.content.DetailActivity

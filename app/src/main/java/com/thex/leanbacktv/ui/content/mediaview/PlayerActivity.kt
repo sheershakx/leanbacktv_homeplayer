@@ -48,7 +48,9 @@ class PlayerActivity : FragmentActivity() {
     lateinit var exoRewind: ImageButton
     lateinit var exoForward: ImageButton
     lateinit var exoPlay: ImageButton
-    lateinit var exoPause: ImageButton
+
+
+    //  lateinit var exoPause: ImageButton
     lateinit var exoNext: ImageButton
     lateinit var exoPrev: ImageButton
     lateinit var exoTimeBar: DefaultTimeBar
@@ -94,19 +96,25 @@ class PlayerActivity : FragmentActivity() {
 
     private fun createPlaylist(mediaList: ArrayList<MediaDataModel>) {
         videoDataList.clear()
+        val intentFileParent: UsbFile? = root.search(filepath)?.parent
+
         for (media in mediaList) {
-            if (media.isDirectory == false) {
-                videoDataList.add(
-                    MediaDataModel(
-                        null,
-                        media.fileName,
-                        null,
-                        media.filePath,
-                        media.isDirectory,
-                        null
+            val arrayFileParent: UsbFile? = root.search(media.filePath)?.parent
+            if (arrayFileParent == intentFileParent && fileType == media.fileType) {
+                if (media.isDirectory == false) {
+                    videoDataList.add(
+                        MediaDataModel(
+                            null,
+                            media.fileName,
+                            null,
+                            media.filePath,
+                            media.isDirectory,
+                            null
+                        )
                     )
-                )
+                }
             }
+
 
         }
     }
@@ -145,15 +153,31 @@ class PlayerActivity : FragmentActivity() {
         //listener
         exoPlayer.addListener(object : Player.Listener {
             override fun onPlayerError(error: PlaybackException) {
-                super.onPlayerError(error)
-                showErrorDialog(error.errorCodeName, error.message.toString())
+
+                when (error.errorCode) {
+                    ExoPlaybackException.TYPE_SOURCE -> {
+
+                    }
+                    else -> {
+                        //showErrorDialog(error.errorCodeName, error.message.toString())
+
+                    }
+                }
+            }
+
+            override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+                super.onMediaItemTransition(mediaItem, reason)
+                setupMetaData()
             }
 
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                 if (playbackState == ExoPlayer.STATE_BUFFERING) {
+                    Log.d("PlayerActivity", "onPlayerStateChanged: buffering")
                     LoaderUtil.showLoader(this@PlayerActivity, true)
                 }
                 if (playbackState == ExoPlayer.STATE_IDLE) {
+                    Log.d("PlayerActivity", "onPlayerStateChanged: idle")
+
                     LoaderUtil.showLoader(this@PlayerActivity, true)
 
                     var currMediaPos = exoPlayer.currentMediaItemIndex
@@ -161,33 +185,53 @@ class PlayerActivity : FragmentActivity() {
                         File(MainApplication.usbCachePath, videoDataList[currMediaPos].fileName)
                     if (!cacheFile.exists()) {
                         copyProcess(videoDataList[currMediaPos].filePath)
-
                     }
                 }
                 if (playbackState == ExoPlayer.STATE_READY) {
-                    exoPlayer.play()
+                    Log.d("PlayerActivity", "onPlayerStateChanged: ready")
+
                     Log.d("PlayerActivity", "media count:${exoPlayer.mediaItemCount} ")
                     LoaderUtil.showLoader(this@PlayerActivity, false)
-                    exoTitle.text = exoPlayer.currentMediaItem?.mediaMetadata?.title
-                    Glide.with(applicationContext).load(R.drawable.placeholder_video)
-                        .placeholder(R.drawable.placeholder_image).into(exoThumbnail)
-                    exoPrev.isEnabled = exoPlayer.hasPreviousMediaItem()
-                    exoNext.isEnabled = exoPlayer.hasNextMediaItem()
-                    durationtoSkip = if (exoPlayer.duration < 600000)  //10 min=600000 ms
-                    {
-                        60000               //60 sec
-                    } else {
-                        30000               //30 sec
-                    }
+                    setupMetaData()
 
+                }
+                if (playbackState == Player.STATE_ENDED) {
+                    Log.d("PlayerActivity", "end to the video: ")
+                    if (!exoPlayer.hasNextMediaItem()) {
+                        toast("No more media to play..")
+                        finish()
+                    }
                 }
             }
         })
 
         //player start
-        exoPlayer.prepare()
+        val cacheFile =
+            File(MainApplication.usbCachePath, videoDataList[0].fileName)
+        if (!cacheFile.exists()) {
+            copyProcess(videoDataList[0].filePath)
+        } else {
+            exoPlayer.prepare()
+            exoPlayer.play()
+
+        }
 
 
+    }
+
+    private fun setupMetaData() {
+        exoTitle.text = exoPlayer.currentMediaItem?.mediaMetadata?.title
+        Glide.with(applicationContext).load(R.drawable.placeholder_video)
+            .placeholder(R.drawable.placeholder_image).into(exoThumbnail)
+        exoPrev.isEnabled = exoPlayer.hasPreviousMediaItem()
+        exoNext.isEnabled = exoPlayer.hasNextMediaItem()
+
+        durationtoSkip = if (exoPlayer.duration < 600000)  //10 min=600000 ms
+        {
+            60000               //60 sec
+        } else {
+            30000               //30 sec
+        }
     }
 
     private fun initializeControllerViews() {
@@ -197,7 +241,7 @@ class PlayerActivity : FragmentActivity() {
         exoForward = binding.videoviewPlayer.findViewById<ImageButton>(R.id.exo_ffwd)
         exoPrev = binding.videoviewPlayer.findViewById<ImageButton>(R.id.exo_prev)
         exoNext = binding.videoviewPlayer.findViewById<ImageButton>(R.id.exo_next)
-        //  exoPause = binding.videoviewPlayer.findViewById<ImageButton>(R.id.exo_pause)
+        // exoPause = binding.videoviewPlayer.findViewById<ImageButton>(R.id.exo_pause)
         //  exoPlay = binding.videoviewPlayer.findViewById<ImageButton>(R.id.exo_play)
         exoTimeBar =
             binding.videoviewPlayer.findViewById(R.id.exo_progress) as DefaultTimeBar
@@ -213,6 +257,7 @@ class PlayerActivity : FragmentActivity() {
         }
         exoNext.setOnClickListener {
             val currMediaPos = exoPlayer.currentMediaItemIndex
+            Log.d("PlayerActivity", "curernt idex:$currMediaPos ")
             val cacheFile =
                 File(MainApplication.usbCachePath, videoDataList[currMediaPos + 1].fileName)
             if (exoPlayer.hasNextMediaItem()) {
@@ -287,14 +332,24 @@ class PlayerActivity : FragmentActivity() {
 
         override fun onPostExecute(result: Void?) {
             exoPlayer.prepare()
+            exoPlayer.play()
+
         }
 
 
     }
 
     private fun showErrorDialog(title: String, message: String) {
-        var errorDialog = ErrorDialog(title, message)
+        var errorDialog = ErrorDialog(title, message, this)
+        errorDialog.isCancelable = false
         errorDialog.show(supportFragmentManager, "ErrorDialog")
+        LoaderUtil.showLoader(this@PlayerActivity, false)
+
+
+
+        exoPlayer.playWhenReady = false
+        exoPlayer.stop()
+        exoPlayer.release()
 
     }
 
@@ -321,8 +376,6 @@ class PlayerActivity : FragmentActivity() {
                 KeyEvent.KEYCODE_DPAD_UP -> {
                     exoPrev.performClick()
                     toast("previous")
-
-
                 }
                 KeyEvent.KEYCODE_DPAD_CENTER -> {
                     binding.videoviewPlayer.showController()

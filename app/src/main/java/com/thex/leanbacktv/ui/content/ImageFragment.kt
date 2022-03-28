@@ -1,8 +1,11 @@
 package com.thex.leanbacktv.ui.content
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView.ScaleType
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.app.VerticalGridSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
@@ -17,15 +20,8 @@ import com.thex.leanbacktv.utils.toast
 import com.thex.leanbacktv.viewmodel.ImageViewModel
 import com.thex.leanbacktv.viewmodel.UsbActionListener
 import me.jahnen.libaums.core.fs.UsbFile
-import android.graphics.Bitmap
-
-import android.graphics.BitmapFactory
-import android.widget.ImageView.ScaleType
 import java.io.File
-
-import me.jahnen.libaums.core.fs.UsbFileStreamFactory.createBufferedInputStream
-import java.io.InputStream
-import kotlin.math.*
+import kotlin.math.min
 
 
 class ImageFragment : VerticalGridSupportFragment(),

@@ -4,14 +4,12 @@
     android:id="@+id/layout_card"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/browse_background"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-
     <ImageView
         android:id="@+id/img_cardimage"
-        android:layout_width="@dimen/_90sdp"
+        android:layout_width="@dimen/_80sdp"
         android:layout_height="@dimen/_45sdp"
         android:scaleType="fitXY"
         android:src="@drawable/img_directory"
@@ -23,7 +21,11 @@
         android:id="@+id/tv_cardtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
         android:padding="@dimen/_3sdp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
         android:text="Media Title"
         android:textAlignment="center"
         android:textColor="@color/white"

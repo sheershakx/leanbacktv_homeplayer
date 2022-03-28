@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/drawable/controller_gradient_layout.xml" value="0.17109375" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/drawable/device_filter.xml" value="0.2203125" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/drawable/exo_buttons_selector.xml" value="0.17578125" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/drawable/exo_seekbar_selector.xml" value="0.17578125" />
@@ -10,11 +11,12 @@
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/drawable/header_shape_back.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/drawable/header_shape_fore.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/drawable/ic_error.xml" value="0.3109375" />
+        <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/drawable/loader_drawable.xml" value="0.17109375" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/layout/activity_detail.xml" value="0.4493333333333333" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/layout/activity_image_view.xml" value="0.3333333333333333" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/layout/activity_main.xml" value="0.31953125" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/layout/activity_player.xml" value="0.3333333333333333" />
-        <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/layout/custom_exoplayer_controller_layout.xml" value="0.3333333333333333" />
+        <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/layout/custom_exoplayer_controller_layout.xml" value="0.4466666666666667" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/layout/device_filter.xml" value="0.4493333333333333" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/layout/fragment_image_view.xml" value="0.4493333333333333" />
         <entry key="..\:/AndroidStudioProjects/leanbacktv/app/src/main/res/layout/layout_card.xml" value="0.8333333333333334" />

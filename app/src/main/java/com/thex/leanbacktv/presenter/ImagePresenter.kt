@@ -16,7 +16,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.thex.leanbacktv.R
 import com.thex.leanbacktv.model.MediaDataModel
@@ -28,9 +27,9 @@ import java.lang.Exception
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
-import androidx.leanback.widget.BaseCardView
-import androidx.leanback.widget.ImageCardView
+import androidx.leanback.widget.*
 import com.thex.leanbacktv.MainApplication
 import com.thex.leanbacktv.ui.content.DetailActivity
 
@@ -52,7 +51,6 @@ class ImagePresenter(val context: Activity) : Presenter() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(viewHolder: ViewHolder?, item: Any?) {
         val holder = viewHolder as MYViewHolder
-
         if (item is MediaDataModel) {
 
             holder.cardTitle.text = item.fileName

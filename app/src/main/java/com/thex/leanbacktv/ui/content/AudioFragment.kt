@@ -122,6 +122,10 @@ class AudioFragment : VerticalGridSupportFragment(),
                 audio.isDirectory,
                 null
             )
+            if (!MainApplication.mediaData.contains(mediaModel)) {
+                MainApplication.mediaData.add(mediaModel)
+
+            }
             gridAdapter.add(mediaModel)
         }
     }

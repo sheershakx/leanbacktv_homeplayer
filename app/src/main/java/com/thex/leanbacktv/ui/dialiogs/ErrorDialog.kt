@@ -1,5 +1,6 @@
 package com.thex.leanbacktv.ui.dialiogs
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +14,13 @@ class ErrorDialog() : DialogFragment() {
     lateinit var binding: LayoutDialogErrorBinding
     private lateinit var errorMessage: String
     private lateinit var errorTitle: String
+    private lateinit var context: Activity
 
 
-    constructor(errorTitle: String, errorMessage: String) : this() {
+    constructor(errorTitle: String, errorMessage: String, context: Activity) : this() {
         this.errorTitle = errorTitle
         this.errorMessage = errorMessage
+        this.context = context
     }
 
 
@@ -50,6 +53,9 @@ class ErrorDialog() : DialogFragment() {
 
         binding.errorBtnOk.setOnClickListener {
             dismiss()
+            context.finish()
+
+
         }
     }
 
